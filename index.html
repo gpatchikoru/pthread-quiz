@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pthread Quiz – Sections A & B</title>
+  <!-- Bootstrap 5 CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .quiz-title {
+      margin-top: 20px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .section-title {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    .question-card {
+      margin-bottom: 20px;
+    }
+    .choices label {
+      display: block;
+      margin-top: 3px;
+      cursor: pointer;
+    }
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .feedback.correct {
+      color: green;
+    }
+    .feedback.wrong {
+      color: red;
+    }
+    /* Highlighting the correct label if the user is wrong */
+    .highlight-correct {
+      color: green;
+      font-weight: bold;
+    }
+    /* Open-Ended styling */
+    .open-ended {
+      margin-top: 5px;
+      width: 100%;
+      min-height: 60px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <span class="navbar-brand">Pthread Quiz</span>
+  </div>
+</nav>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+  <h1 class="quiz-title">Chapter 4: Shared Memory Programming with Pthread</h1>
+
+  <!-- SECTION A: Multiple-Choice Questions -->
+  <h2 class="section-title">Section A: Multiple-Choice (Auto-Graded)</h2>
+  <div id="quiz-container"></div>
+
+  <!-- GET FINAL SCORE BUTTON -->
+  <div class="text-center my-4">
+    <button class="btn btn-primary" onclick="calculateFinalScore()">
+      Get Final Score
+    </button>
+    <div id="final-score" class="mt-3 fs-5 fw-bold text-success"></div>
+  </div>
+
+  <!-- SECTION B: Open-Ended Questions -->
+  <h2 class="section-title">Section B: Open-Ended Questions</h2>
+  <p>These questions are for practice. Type your answers below (no automatic grading).</p>
+  <div id="section-b-container"></div>
+
+  <hr/>
+  <footer class="text-center text-muted mb-4">
+    <p>Combined Quiz: Randomized Multiple-Choice & Open-Ended</p>
+  </footer>
+</div>
+
+<!-- Bootstrap Bundle JS -->
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script>
+// -------------------------------------------------------------------
+// SECTION A Data: 50 Multiple-Choice Questions
+// -------------------------------------------------------------------
+const quizAData = [
+  {
+    question: "1. What is the primary purpose of pthread_create() in pthread programming?",
+    choices: [
+      "a) Create a thread",
+      "b) Terminate a thread",
+      "c) Wait for a thread",
+      "d) Allocate memory for a thread"
+    ],
+    correct: 0
+  },
+  {
+    question: "2. Which header file is required for pthread programming in C?",
+    choices: [
+      "a) <thread.h>",
+      "b) <pthread.h>",
+      "c) <threads.h>",
+      "d) <unistd.h>"
+    ],
+    correct: 1
+  },
+  {
+    question: "3. What does the pthread_exit() function do?",
+    choices: [
+      "a) Terminates the calling thread",
+      "b) Terminates all threads",
+      "c) Joins the calling thread with another thread",
+      "d) Starts a new thread"
+    ],
+    correct: 0
+  },
+  {
+    question: "4. What is the function of pthread_join()?",
+    choices: [
+      "a) Waits for a thread to terminate",
+      "b) Creates a new thread",
+      "c) Suspends a thread",
+      "d) Ends the current thread"
+    ],
+    correct: 0
+  },
+  {
+    question: "5. Which function is used to get the thread ID in pthread programming?",
+    choices: [
+      "a) pthread_create()",
+      "b) pthread_id()",
+      "c) pthread_self()",
+      "d) pthread_id_get()"
+    ],
+    correct: 2
+  },
+  {
+    question: "6. What does the pthread_detach() function do?",
+    choices: [
+      "a) Makes a thread joinable",
+      "b) Makes a thread unjoinable",
+      "c) Suspends the thread",
+      "d) Terminates the thread immediately"
+    ],
+    correct: 1
+  },
+  {
+    question: "7. What happens if a thread is created but not joined or detached?",
+    choices: [
+      "a) It causes a memory leak",
+      "b) The program will terminate immediately",
+      "c) The thread will not be executed",
+      "d) The resources used by the thread may not be freed"
+    ],
+    correct: 3
+  },
+  {
+    question: "8. Which of the following is a valid argument type for pthread_create()?",
+    choices: [
+      "a) A function pointer",
+      "b) A string",
+      "c) An integer",
+      "d) A file descriptor"
+    ],
+    correct: 0
+  },
+  {
+    question: "9. What does pthread_mutex_lock() do?",
+    choices: [
+      "a) Unlocks a mutex",
+      "b) Locks a mutex",
+      "c) Unlocks a thread",
+      "d) Locks a thread"
+    ],
+    correct: 1
+  },
+  {
+    question: "10. What does pthread_mutex_unlock() do?",
+    choices: [
+      "a) Locks a mutex",
+      "b) Unlocks a mutex",
+      "c) Locks a thread",
+      "d) Unlocks a thread"
+    ],
+    correct: 1
+  },
+  {
+    question: "11. Which function is used to initialize a mutex in pthread programming?",
+    choices: [
+      "a) pthread_mutex_init()",
+      "b) pthread_mutex_create()",
+      "c) pthread_mutex_lock()",
+      "d) pthread_mutex_unlock()"
+    ],
+    correct: 0
+  },
+  {
+    question: "12. What is the purpose of a pthread_cond_t variable?",
+    choices: [
+      "a) To manage thread synchronization using conditions",
+      "b) To create a thread",
+      "c) To terminate a thread",
+      "d) To lock a mutex"
+    ],
+    correct: 0
+  },
+  {
+    question: "13. What is the purpose of pthread_cond_wait()?",
+    choices: [
+      "a) To wait for a condition variable to be signaled",
+      "b) To signal a condition variable",
+      "c) To create a thread",
+      "d) To lock a mutex"
+    ],
+    correct: 0
+  },
+  {
+    question: "14. Which function is used to signal a condition variable?",
+    choices: [
+      "a) pthread_cond_wait()",
+      "b) pthread_cond_signal()",
+      "c) pthread_cond_broadcast()",
+      "d) pthread_create()"
+    ],
+    correct: 1
+  },
+  {
+    question: "15. How do you prevent a race condition in pthread programming?",
+    choices: [
+      "a) Use a semaphore",
+      "b) Use mutexes",
+      "c) Use signals",
+      "d) Use condition variables"
+    ],
+    correct: 1
+  },
+  {
+    question: "16. What does pthread_cond_broadcast() do?",
+    choices: [
+      "a) Signals all threads waiting on a condition variable",
+      "b) Signals a single thread waiting on a condition variable",
+      "c) Creates a thread",
+      "d) Joins all threads"
+    ],
+    correct: 0
+  },
+  {
+    question: "17. Which function is used to cancel a thread in pthread programming?",
+    choices: [
+      "a) pthread_cancel()",
+      "b) pthread_terminate()",
+      "c) pthread_exit()",
+      "d) pthread_join()"
+    ],
+    correct: 0
+  },
+  {
+    question: "18. What is a potential issue with calling pthread_cancel()?",
+    choices: [
+      "a) The thread may not be terminated immediately",
+      "b) It always terminates the thread",
+      "c) It causes memory leaks",
+      "d) It makes the program crash"
+    ],
+    correct: 0
+  },
+  {
+    question: "19. What type of variable is used to handle multiple threads concurrently in pthread programming?",
+    choices: [
+      "a) Global variable",
+      "b) Shared variable",
+      "c) Private variable",
+      "d) Mutex variable"
+    ],
+    correct: 1
+  },
+  {
+    question: "20. What does pthread_once() ensure?",
+    choices: [
+      "a) A block of code is executed only once, regardless of how many threads invoke it",
+      "b) A thread runs only once",
+      "c) A thread exits after one execution",
+      "d) A thread executes periodically"
+    ],
+    correct: 0
+  },
+  {
+    question: "21. Which of the following functions can be used to set thread-specific data in pthread programming?",
+    choices: [
+      "a) pthread_setspecific()",
+      "b) pthread_getspecific()",
+      "c) pthread_create()",
+      "d) pthread_exit()"
+    ],
+    correct: 0
+  },
+  {
+    question: "22. What is the default thread attribute used when creating a thread?",
+    choices: [
+      "a) Joinable",
+      "b) Detached",
+      "c) Default",
+      "d) Shared"
+    ],
+    correct: 0
+  },
+  {
+    question: "23. Which function is used to change thread attributes before creation?",
+    choices: [
+      "a) pthread_attr_set()",
+      "b) pthread_attr_init()",
+      "c) pthread_attr_setdetachstate()",
+      "d) pthread_create()"
+    ],
+    correct: 2
+  },
+  {
+    question: "24. In pthread programming, which state is a thread in when it is waiting for another thread to complete its execution?",
+    choices: [
+      "a) Running",
+      "b) Sleeping",
+      "c) Waiting",
+      "d) Terminated"
+    ],
+    correct: 2
+  },
+  {
+    question: "25. Which function can be used to set a thread to detached state?",
+    choices: [
+      "a) pthread_detach()",
+      "b) pthread_detach_state()",
+      "c) pthread_join()",
+      "d) pthread_create()"
+    ],
+    correct: 0
+  },
+  {
+    question: "26. What is a race condition?",
+    choices: [
+      "a) A situation where two threads try to modify a shared resource simultaneously",
+      "b) A situation where threads work in sequential order",
+      "c) A thread is waiting indefinitely for a condition",
+      "d) Threads are waiting for user input"
+    ],
+    correct: 0
+  },
+  {
+    question: "27. Which pthread function is used to initialize a condition variable?",
+    choices: [
+      "a) pthread_cond_init()",
+      "b) pthread_cond_create()",
+      "c) pthread_cond_wait()",
+      "d) pthread_cond_signal()"
+    ],
+    correct: 0
+  },
+  {
+    question: "28. What does the pthread_self() function return?",
+    choices: [
+      "a) The ID of the calling thread",
+      "b) The state of the calling thread",
+      "c) The memory address of the calling thread",
+      "d) The return code of the calling thread"
+    ],
+    correct: 0
+  },
+  {
+    question: "29. Which of the following is the proper function to join a thread?",
+    choices: [
+      "a) pthread_terminate()",
+      "b) pthread_exit()",
+      "c) pthread_create()",
+      "d) pthread_join()"
+    ],
+    correct: 3
+  },
+  {
+    question: "30. Which function is used to initialize a read-write lock?",
+    choices: [
+      "a) pthread_rwlock_init()",
+      "b) pthread_mutex_init()",
+      "c) pthread_rwlock_create()",
+      "d) pthread_lock_init()"
+    ],
+    correct: 0
+  },
+  {
+    question: "31. What happens if you call pthread_join() on a thread that has already been detached?",
+    choices: [
+      "a) It will block indefinitely",
+      "b) It will cause an error",
+      "c) It will return immediately",
+      "d) It will automatically detach the thread"
+    ],
+    correct: 1
+  },
+  {
+    question: "32. What is the return type of pthread_create()?",
+    choices: [
+      "a) int",
+      "b) void *",
+      "c) pthread_t",
+      "d) void"
+    ],
+    correct: 0
+  },
+  {
+    question: "33. What happens if a thread does not call pthread_exit() or pthread_join()?",
+    choices: [
+      "a) The thread will terminate after completing its function",
+      "b) It will lead to a resource leak",
+      "c) The program will hang",
+      "d) The thread will restart automatically"
+    ],
+    correct: 1
+  },
+  {
+    question: "34. Which of the following allows multiple threads to safely access shared data in pthread programming?",
+    choices: [
+      "a) Semaphore",
+      "b) Mutex",
+      "c) Condition Variable",
+      "d) All of the above"
+    ],
+    correct: 3
+  },
+  {
+    question: "35. What is the purpose of pthread_rwlock_wrlock()?",
+    choices: [
+      "a) It locks the read-write lock for writing",
+      "b) It locks the read-write lock for reading",
+      "c) It unlocks the read-write lock",
+      "d) It initializes the read-write lock"
+    ],
+    correct: 0
+  },
+  {
+    question: "36. What is the default state of a newly created thread in pthread programming?",
+    choices: [
+      "a) Running",
+      "b) Waiting",
+      "c) Ready",
+      "d) Joinable"
+    ],
+    correct: 3
+  },
+  {
+    question: "37. Which of the following is true about thread synchronization?",
+    choices: [
+      "a) It allows threads to run concurrently without conflicts",
+      "b) It prevents threads from executing concurrently",
+      "c) It is only needed for CPU-bound tasks",
+      "d) It stops all threads after a specified time"
+    ],
+    correct: 0
+  },
+  {
+    question: "38. What happens when you call pthread_cancel() on a thread that is not in a cancellable state?",
+    choices: [
+      "a) The thread will cancel immediately",
+      "b) The thread will ignore the cancellation request",
+      "c) The thread will terminate",
+      "d) The thread will restart"
+    ],
+    correct: 1
+  },
+  {
+    question: "39. Which of the following functions is used to destroy a mutex?",
+    choices: [
+      "a) pthread_mutex_destroy()",
+      "b) pthread_mutex_remove()",
+      "c) pthread_mutex_free()",
+      "d) pthread_mutex_clear()"
+    ],
+    correct: 0
+  },
+  {
+    question: "40. How can you achieve thread synchronization in pthread programming?",
+    choices: [
+      "a) By using threads only",
+      "b) By using condition variables or mutexes",
+      "c) By using threads without any locks",
+      "d) By using signal handlers"
+    ],
+    correct: 1
+  },
+  {
+    question: "41. What is a joinable thread in pthread programming?",
+    choices: [
+      "a) A thread that has completed execution",
+      "b) A thread that is not created yet",
+      "c) A thread that can be joined with another thread",
+      "d) A thread that cannot be terminated"
+    ],
+    correct: 2
+  },
+  {
+    question: "42. How do you wait for a thread to finish execution before continuing with the program in pthreads?",
+    choices: [
+      "a) pthread_join()",
+      "b) pthread_create()",
+      "c) pthread_exit()",
+      "d) pthread_wait()"
+    ],
+    correct: 0
+  },
+  {
+    question: "43. How does pthread_attr_setdetachstate() function work?",
+    choices: [
+      "a) It sets the state of a thread to detached or joinable",
+      "b) It initializes the thread's attributes",
+      "c) It retrieves the current thread's status",
+      "d) It starts a new thread"
+    ],
+    correct: 0
+  },
+  {
+    question: "44. Which function in pthread programming creates a thread?",
+    choices: [
+      "a) pthread_start()",
+      "b) pthread_create()",
+      "c) pthread_begin()",
+      "d) pthread_initialize()"
+    ],
+    correct: 1
+  },
+  {
+    question: "45. What is the function of pthread_rwlock_rdlock()?",
+    choices: [
+      "a) Locks the read-write lock for reading",
+      "b) Locks the read-write lock for writing",
+      "c) Unlocks the read-write lock",
+      "d) Initializes the read-write lock"
+    ],
+    correct: 0
+  },
+  {
+    question: "46. Which pthread function is used to free resources of a condition variable?",
+    choices: [
+      "a) pthread_cond_destroy()",
+      "b) pthread_cond_free()",
+      "c) pthread_cond_cleanup()",
+      "d) pthread_cond_remove()"
+    ],
+    correct: 0
+  },
+  {
+    question: "47. What is the result if a thread calls pthread_cancel() on itself?",
+    choices: [
+      "a) The thread will immediately exit",
+      "b) The thread will continue running",
+      "c) The thread will terminate after its current operation finishes",
+      "d) The thread will ignore the cancel request"
+    ],
+    correct: 2
+  },
+  {
+    question: "48. Which of the following allows multiple threads to safely share data in pthread programming?",
+    choices: [
+      "a) Mutex",
+      "b) Semaphore",
+      "c) Condition variable",
+      "d) All of the above"
+    ],
+    correct: 3
+  },
+  {
+    question: "49. What does pthread_once() guarantee when initializing a resource in a multi-threaded environment?",
+    choices: [
+      "a) The resource is initialized once per thread",
+      "b) The resource is initialized once globally for all threads",
+      "c) The resource is initialized multiple times",
+      "d) No initialization occurs"
+    ],
+    correct: 1
+  },
+  {
+    question: "50. Which function can be used to test whether a thread is already canceled?",
+    choices: [
+      "a) pthread_testcancel()",
+      "b) pthread_checkcancel()",
+      "c) pthread_cancel()",
+      "d) pthread_cancel_test()"
+    ],
+    correct: 0
+  }
+];
+
+// -------------------------------------------------------------------
+// SECTION B Data: 16 Open-Ended Questions (ungraded).
+// -------------------------------------------------------------------
+const quizBData = [
+  {
+    question: "1. What is the Pthreads function to instantiate a thread?",
+    prompt: "Possible answers: pthread_create(), pthread_start(), etc."
+  },
+  {
+    question: "2. The pthread_join() function is used to _______________ a thread.",
+    prompt: "Fill in the blank (e.g., 'wait for completion')."
+  },
+  {
+    question: "3. What can possibly happen if you don’t have a call to pthread_join() for a thread?",
+    prompt: "Think about resource leaks, exiting, etc."
+  },
+  {
+    question: "4. In which situation can a race condition arise in a multithreaded program?",
+    prompt: "Consider shared resources, concurrency, etc."
+  },
+  {
+    question: "5. What is a critical section in a program?",
+    prompt: "Explain the concept in your own words."
+  },
+  {
+    question: "6. What is the main disadvantage of handling a critical section with busy waiting?",
+    prompt: "Think about CPU usage and efficiency."
+  },
+  {
+    question: "7. ______________ are used to guarantee that one thread “excludes” all other threads while it executes the critical section.",
+    prompt: "Fill in the blank (mutexes, semaphores, etc.)"
+  },
+  {
+    question: "8. The Pthreads library includes a special type for mutexes: ________________.",
+    prompt: "Fill in the blank (pthread_mutex_t?)"
+  },
+  {
+    question: "9. In order to gain access to a critical section controlled by a mutex, a thread must call a Pthreads function: ________________.",
+    prompt: "Hint: pthread_mutex_lock()"
+  },
+  {
+    question: "10. When a Pthreads program finishes using a mutex, it should call the _______________ function.",
+    prompt: "Hint: pthread_mutex_destroy()"
+  },
+  {
+    question: "11. When a thread is finished executing the code in a critical section controlled by a mutex, it should call the ________________ function.",
+    prompt: "Hint: pthread_mutex_unlock()"
+  },
+  {
+    question: "12. Before using a semaphore, the semaphore must be initialized by using a function ___________.",
+    prompt: "Hint: sem_init()"
+  },
+  {
+    question: "13. A thread, before accessing a critical section, should call a function ___________________.",
+    prompt: "Hint: pthread_mutex_lock()"
+  },
+  {
+    question: "14. A thread, once done with a critical section, should call a function _________________.",
+    prompt: "Hint: pthread_mutex_unlock()"
+  },
+  {
+    question: "15. How can you use a mutex and a busy waiting technique to implement a barrier for synchronization of threads?",
+    prompt: "Explain your approach."
+  },
+  {
+    question: "16. How can you implement a barrier using two semaphores, one a count semaphore and the other a binary semaphore?",
+    prompt: "Sketch out the logic."
+  }
+];
+
+// Track correctness per question in Section A:
+// 'null' means unanswered, true = correct, false = wrong
+let userAnswers = new Array(quizAData.length).fill(null);
+
+// -------------- SHUFFLE Section A (Fisher-Yates) --------------
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+// Randomize Section A
+shuffleArray(quizAData);
+
+// -------------- RENDER Section A (Multiple-Choice) --------------
+const quizContainer = document.getElementById("quiz-container");
+
+quizAData.forEach((data, index) => {
+  // Create card
+  const card = document.createElement("div");
+  card.className = "card question-card";
+
+  const cardBody = document.createElement("div");
+  cardBody.className = "card-body";
+
+  // Question text
+  const questionTitle = document.createElement("h5");
+  questionTitle.className = "card-title";
+  questionTitle.textContent = `Question ${index + 1}: ${data.question}`;
+  cardBody.appendChild(questionTitle);
+
+  // We'll store references to each label so we can highlight the correct one if user is wrong or selects none.
+  const labelsArray = [];
+
+  // Choices container
+  const choicesDiv = document.createElement("div");
+  choicesDiv.className = "choices";
+
+  data.choices.forEach((choice, cIndex) => {
+    const label = document.createElement("label");
+    label.className = "form-check-label";
+
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "question-" + index; // group by question index
+    radio.value = cIndex;
+    radio.classList.add("form-check-input", "me-2");
+
+    label.appendChild(radio);
+    label.appendChild(document.createTextNode(choice));
+    choicesDiv.appendChild(label);
+
+    // Store reference
+    labelsArray.push(label);
+  });
+
+  cardBody.appendChild(choicesDiv);
+
+  // Feedback placeholder
+  const feedbackSpan = document.createElement("div");
+  feedbackSpan.className = "feedback";
+  feedbackSpan.id = "feedback-" + index;
+  cardBody.appendChild(feedbackSpan);
+
+  // Check Answer button
+  const checkBtn = document.createElement("button");
+  checkBtn.className = "btn btn-sm btn-outline-primary mt-2";
+  checkBtn.textContent = "Check Answer";
+
+  checkBtn.onclick = function() {
+    // Find selected radio
+    const radios = document.getElementsByName("question-" + index);
+    let selectedIndex = -1;
+    radios.forEach((r) => {
+      if (r.checked) {
+        selectedIndex = parseInt(r.value, 10);
+      }
+    });
+
+    // If no selection, treat as wrong automatically
+    if (selectedIndex === -1 || selectedIndex !== data.correct) {
+      feedbackSpan.textContent =
+        "Wrong. The correct answer is: " + data.choices[data.correct];
+      feedbackSpan.classList.add("wrong");
+      feedbackSpan.classList.remove("correct");
+      userAnswers[index] = false;
+
+      // Highlight the correct label in green
+      labelsArray[data.correct].classList.add("highlight-correct");
+    } else {
+      // user selectedIndex == data.correct
+      feedbackSpan.textContent = "Correct!";
+      feedbackSpan.classList.add("correct");
+      feedbackSpan.classList.remove("wrong");
+      userAnswers[index] = true;
+    }
+
+    // Disable the radios so user can't change after checking
+    radios.forEach(r => r.disabled = true);
+  };
+
+  cardBody.appendChild(checkBtn);
+  card.appendChild(cardBody);
+  quizContainer.appendChild(card);
+});
+
+// -------------- FINAL SCORE (Section A) --------------
+function calculateFinalScore() {
+  let score = 0;
+  userAnswers.forEach((ans) => {
+    if (ans === true) {
+      score++;
+    }
+  });
+  const finalScore = document.getElementById("final-score");
+  finalScore.textContent = `Your final score: ${score} / ${quizAData.length}`;
+}
+
+// -------------- RENDER Section B (Open-Ended) --------------
+const sectionBContainer = document.getElementById("section-b-container");
+
+quizBData.forEach((qObj, i) => {
+  const card = document.createElement("div");
+  card.className = "card question-card";
+
+  const cardBody = document.createElement("div");
+  cardBody.className = "card-body";
+
+  // Question text
+  const qTitle = document.createElement("h5");
+  qTitle.className = "card-title";
+  qTitle.textContent = `Q${i + 1}: ${qObj.question}`;
+  cardBody.appendChild(qTitle);
+
+  // Prompt
+  const promptP = document.createElement("p");
+  promptP.className = "text-muted";
+  promptP.textContent = "Hint: " + qObj.prompt;
+  cardBody.appendChild(promptP);
+
+  // Textarea (open-ended)
+  const textarea = document.createElement("textarea");
+  textarea.className = "form-control open-ended";
+  textarea.placeholder = "Type your answer here...";
+  cardBody.appendChild(textarea);
+
+  card.appendChild(cardBody);
+  sectionBContainer.appendChild(card);
+});
+</script>
+</body>
+</html>
