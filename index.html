@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pthread Quiz – Sections A & B with Direct Answers</title>
+  <title>Pthread Quiz – Sections A & B Both Graded</title>
   <!-- Bootstrap 5 CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
     rel="stylesheet"
   >
   <style>
@@ -40,13 +40,8 @@
       color: red;
     }
     .highlight-correct {
-      color: green;
+      color: green; 
       font-weight: bold;
-    }
-    .answer-direct {
-      margin-top: 5px;
-      font-style: italic;
-      color: #0d6efd; 
     }
   </style>
 </head>
@@ -59,32 +54,49 @@
   </div>
 </nav>
 
-
+<!-- MAIN CONTAINER -->
 <div class="container">
   <h1 class="quiz-title">Chapter 4: Shared Memory Programming with Pthread</h1>
-  <h2 class="section-title">Section A: Multiple-Choice (Auto-Graded)</h2>
-  <div id="quiz-container"></div>
+
+  <!-- SECTION A -->
+  <h2 class="section-title">Section A: Multiple-Choice (Auto-Graded, 50 Questions)</h2>
+  <div id="section-a-container"></div>
+  
+  <!-- GET FINAL SCORE BUTTON FOR SECTION A -->
   <div class="text-center my-4">
-    <button class="btn btn-primary" onclick="calculateFinalScore()">
-      Get Final Score
+    <button class="btn btn-primary" onclick="calculateFinalScoreA()">
+      Get Final Score (A)
     </button>
-    <div id="final-score" class="mt-3 fs-5 fw-bold text-success"></div>
+    <div id="final-score-a" class="mt-3 fs-5 fw-bold text-success"></div>
   </div>
-  <h2 class="section-title">Section B: Questions with Direct Answers</h2>
+
+  <!-- SECTION B -->
+  <h2 class="section-title">Section B: Multiple-Choice (Auto-Graded, 16 Questions)</h2>
   <div id="section-b-container"></div>
+  
+  <!-- GET FINAL SCORE BUTTON FOR SECTION B -->
+  <div class="text-center my-4">
+    <button class="btn btn-secondary" onclick="calculateFinalScoreB()">
+      Get Final Score (B)
+    </button>
+    <div id="final-score-b" class="mt-3 fs-5 fw-bold text-success"></div>
+  </div>
 
   <hr/>
   <footer class="text-center text-muted mb-4">
-    <p>Combined Quiz: Randomized Multiple-Choice & Direct Answers in Section B</p>
+    <p>Combined Quiz: Section A & Section B, Both with Immediate Feedback & Final Scores</p>
   </footer>
 </div>
 
-<script
+<!-- Bootstrap JS -->
+<script 
   src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
 </script>
 
 <script>
-//sectionA
+// ------------------------------------------------------
+// SECTION A: 50 MCQs (with correct answers), SHUFFLED
+// ------------------------------------------------------
 const quizAData = [
   {
     question: "1. What is the primary purpose of pthread_create() in pthread programming?",
@@ -588,132 +600,241 @@ const quizAData = [
   }
 ];
 
-// section b
+// ------------------------------------------------------
+// SECTION B: 16 MCQs with correct answers (based on your question set)
+// ------------------------------------------------------
 const quizBData = [
   {
     question: "1. What is the Pthreads function to instantiate a thread?",
-    answer: "pthread_create()"
+    choices: [
+      "a) pthread_start()",
+      "b) pthread_create()",
+      "c) pthread_instantiate()",
+      "d) pthread_run()"
+    ],
+    correct: 1  // (b) pthread_create()
   },
   {
     question: "2. The pthread_join() function is used to _______________ a thread.",
-    answer: "Wait for the completion of the thread."
+    choices: [
+      "a) Cancel",
+      "b) Create",
+      "c) Wait for the completion of",
+      "d) Resume"
+    ],
+    correct: 2  // (c) Wait for the completion of
   },
   {
-    question: "3. What can possibly happen if you don’t have a call to pthread_join() for a thread?",
-    answer: "The thread’s resources may not be freed, potentially causing a resource leak."
+    question: "3. What can possibly happen if you don’t have a call to a pthread_join() function corresponding to a thread in a program?",
+    choices: [
+      "a) The program may hang or exit prematurely.",
+      "b) The thread will be executed immediately.",
+      "c) The thread will automatically complete execution.",
+      "d) The program will automatically join all threads."
+    ],
+    correct: 0  // (a) The program may hang or exit prematurely.
   },
   {
     question: "4. In which situation can a race condition arise in a multithreaded program?",
-    answer: "When two or more threads access and modify shared data without proper synchronization."
+    choices: [
+      "a) When two threads are accessing shared resources concurrently without proper synchronization",
+      "b) When each thread accesses its own resources independently",
+      "c) When threads are executing in a sequential order",
+      "d) When only one thread is running at any given time"
+    ],
+    correct: 0  // (a) Two threads accessing shared resources concurrently w/o sync
   },
   {
     question: "5. What is a critical section in a program?",
-    answer: "A code segment where shared resources are accessed, requiring synchronization to avoid conflicts."
+    choices: [
+      "a) A part of the code that can be executed by multiple threads concurrently",
+      "b) A part of the code that ensures only one thread accesses shared resources at a time",
+      "c) A part of the program that handles errors",
+      "d) A section of the code that is executed sequentially by a single thread"
+    ],
+    correct: 1  // (b) A part ensuring only one thread uses shared resources
   },
   {
     question: "6. What is the main disadvantage of handling a critical section with busy waiting?",
-    answer: "Busy waiting wastes CPU cycles by continuously polling instead of blocking."
+    choices: [
+      "a) It leads to inefficient use of CPU resources, as the thread continuously checks for availability",
+      "b) It guarantees the threads will never be interrupted",
+      "c) It requires fewer resources than using mutexes",
+      "d) It automatically synchronizes threads without any additional overhead"
+    ],
+    correct: 0  // (a) Inefficient CPU usage
   },
   {
     question: "7. ______________ are used to guarantee that one thread “excludes” all other threads while it executes the critical section.",
-    answer: "Mutexes."
+    choices: [
+      "a) Semaphores",
+      "b) Mutexes",
+      "c) Condition variables",
+      "d) Spinlocks"
+    ],
+    correct: 1  // (b) Mutexes
   },
   {
     question: "8. The Pthreads library includes a special type for mutexes: ________________.",
-    answer: "pthread_mutex_t."
+    choices: [
+      "a) pthread_mutex_t",
+      "b) pthread_lock_t",
+      "c) pthread_semaphore_t",
+      "d) pthread_critical_t"
+    ],
+    correct: 0  // (a) pthread_mutex_t
   },
   {
-    question: "9. In order to gain access to a critical section controlled by a mutex, a thread must call a Pthreads function: ________________.",
-    answer: "pthread_mutex_lock()."
+    question: "9. In order to gain access to a critical section controlled by a mutex, a thread must call a Pthreads function: _______________.",
+    choices: [
+      "a) pthread_unlock()",
+      "b) pthread_wait()",
+      "c) pthread_mutex_lock()",
+      "d) pthread_mutex_wait()"
+    ],
+    correct: 2  // (c) pthread_mutex_lock()
   },
   {
-    question: "10. When a Pthreads program finishes using a mutex, it should call the _______________ function.",
-    answer: "pthread_mutex_destroy()."
+    question: "10. When a Pthreads program finishes using a mutex, it should call the ___________________ function.",
+    choices: [
+      "a) pthread_mutex_unlock()",
+      "b) pthread_mutex_destroy()",
+      "c) pthread_mutex_release()",
+      "d) pthread_mutex_exit()"
+    ],
+    correct: 1  // (b) pthread_mutex_destroy()
   },
   {
-    question: "11. When a thread is finished executing the code in a critical section controlled by a mutex, it should call the ________________ function.",
-    answer: "pthread_mutex_unlock()."
+    question: "11. When a thread is finished executing the code in a critical section controlled by a mutex, it should call the _________________ function.",
+    choices: [
+      "a) pthread_mutex_unlock()",
+      "b) pthread_mutex_exit()",
+      "c) pthread_mutex_wait()",
+      "d) pthread_mutex_release()"
+    ],
+    correct: 0  // (a) pthread_mutex_unlock()
   },
   {
     question: "12. Before using a semaphore, the semaphore must be initialized by using a function ___________.",
-    answer: "sem_init()."
+    choices: [
+      "a) sem_init()",
+      "b) semaphore_create()",
+      "c) sem_setup()",
+      "d) semaphore_init()"
+    ],
+    correct: 0  // (a) sem_init()
   },
   {
     question: "13. A thread, before accessing a critical section, should call a function ___________________.",
-    answer: "pthread_mutex_lock()."
+    choices: [
+      "a) pthread_mutex_unlock()",
+      "b) pthread_mutex_lock()",
+      "c) pthread_wait()",
+      "d) pthread_join()"
+    ],
+    correct: 1  // (b) pthread_mutex_lock()
   },
   {
-    question: "14. A thread, once done with a critical section, should call a function _________________.",
-    answer: "pthread_mutex_unlock()."
+    question: "14. A thread, once done with a critical section, should call a function __________________.",
+    choices: [
+      "a) pthread_mutex_lock()",
+      "b) pthread_mutex_unlock()",
+      "c) pthread_mutex_wait()",
+      "d) pthread_join()"
+    ],
+    correct: 1  // (b) pthread_mutex_unlock()
   },
   {
     question: "15. How can you use a mutex and a busy waiting technique to implement a barrier for synchronization of threads?",
-    answer: "Use a shared counter protected by a mutex, and threads spin-wait until all have reached the barrier."
+    choices: [
+      "a) By using a mutex to lock the barrier and having threads wait in a busy loop until all threads arrive",
+      "b) By using a mutex to unlock the barrier when the last thread arrives",
+      "c) By using busy waiting without a mutex to allow threads to execute concurrently",
+      "d) By using the mutex to create a semaphore for thread synchronization"
+    ],
+    correct: 0  // (a) Lock the barrier, threads busy wait
   },
   {
     question: "16. How can you implement a barrier using two semaphores, one a count semaphore and the other a binary semaphore?",
-    answer: "Use the count semaphore to track the number of arriving threads, and once the required number is reached, release the binary semaphore to allow all waiting threads to proceed."
+    choices: [
+      "a) By using the count semaphore to track the number of threads and the binary semaphore to signal when all threads have arrived at the barrier",
+      "b) By using both semaphores to allow only one thread to access the barrier at a time",
+      "c) By using the count semaphore to limit the number of threads at the barrier and the binary semaphore for mutual exclusion",
+      "d) By using the count semaphore to initialize the barrier and the binary semaphore to release threads sequentially"
+    ],
+    correct: 0  // (a) Use count sem to track # threads, binary to signal all arrived
   }
 ];
 
-let userAnswers = new Array(quizAData.length).fill(null);
-//shuffle 
+// Arrays to track user correctness for each section
+let userAnswersA = new Array(quizAData.length).fill(null);
+let userAnswersB = new Array(quizBData.length).fill(null);
+
+// ---------- SHUFFLE SECTION A & B (if desired) ----------
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
-  return array;
 }
-//randomize Section A
-shuffleArray(quizAData);
 
-const quizContainer = document.getElementById("quiz-container");
+// Shuffle both sections
+shuffleArray(quizAData);
+shuffleArray(quizBData);
+
+// --------------- RENDER SECTION A ---------------
+const sectionAContainer = document.getElementById("section-a-container");
 
 quizAData.forEach((data, index) => {
+  // Create card
   const card = document.createElement("div");
   card.className = "card question-card";
 
   const cardBody = document.createElement("div");
   cardBody.className = "card-body";
+
+  // Title
   const questionTitle = document.createElement("h5");
   questionTitle.className = "card-title";
   questionTitle.textContent = `Question ${index + 1}: ${data.question}`;
   cardBody.appendChild(questionTitle);
+
+  // store references for highlighting
   const labelsArray = [];
+
+  // Choices
   const choicesDiv = document.createElement("div");
   choicesDiv.className = "choices";
 
   data.choices.forEach((choice, cIndex) => {
     const label = document.createElement("label");
     label.className = "form-check-label";
-
+    
     const radio = document.createElement("input");
     radio.type = "radio";
-    radio.name = "question-" + index; // group by question index
+    radio.name = "A-q-" + index; 
     radio.value = cIndex;
     radio.classList.add("form-check-input", "me-2");
 
     label.appendChild(radio);
     label.appendChild(document.createTextNode(choice));
     choicesDiv.appendChild(label);
+
     labelsArray.push(label);
   });
 
   cardBody.appendChild(choicesDiv);
+
   const feedbackSpan = document.createElement("div");
   feedbackSpan.className = "feedback";
-  feedbackSpan.id = "feedback-" + index;
   cardBody.appendChild(feedbackSpan);
 
-  // Check Answer button
   const checkBtn = document.createElement("button");
   checkBtn.className = "btn btn-sm btn-outline-primary mt-2";
   checkBtn.textContent = "Check Answer";
 
   checkBtn.onclick = function() {
-    // Find selected radio
-    const radios = document.getElementsByName("question-" + index);
+    const radios = document.getElementsByName("A-q-" + index);
     let selectedIndex = -1;
     radios.forEach((r) => {
       if (r.checked) {
@@ -721,69 +842,136 @@ quizAData.forEach((data, index) => {
       }
     });
 
-    // If no selection or wrong selection
     if (selectedIndex === -1 || selectedIndex !== data.correct) {
       feedbackSpan.textContent =
         "Wrong. The correct answer is: " + data.choices[data.correct];
       feedbackSpan.classList.add("wrong");
       feedbackSpan.classList.remove("correct");
-      userAnswers[index] = false;
-      // Highlight the correct label
+
+      userAnswersA[index] = false;
       labelsArray[data.correct].classList.add("highlight-correct");
     } else {
-      // user selected the correct index
       feedbackSpan.textContent = "Correct!";
       feedbackSpan.classList.add("correct");
       feedbackSpan.classList.remove("wrong");
-      userAnswers[index] = true;
+      userAnswersA[index] = true;
     }
 
-    // Disable the radios so user can't change after checking
+    // Disable radios
     radios.forEach(r => r.disabled = true);
   };
 
   cardBody.appendChild(checkBtn);
   card.appendChild(cardBody);
-  quizContainer.appendChild(card);
+  sectionAContainer.appendChild(card);
 });
 
-
-function calculateFinalScore() {
-  let score = 0;
-  userAnswers.forEach((ans) => {
-    if (ans === true) {
-      score++;
-    }
-  });
-  const finalScore = document.getElementById("final-score");
-  finalScore.textContent = `Your final score: ${score} / ${quizAData.length}`;
-}
-
-// -------------- RENDER Section B (Direct Answers) --------------
+// --------------- RENDER SECTION B ---------------
 const sectionBContainer = document.getElementById("section-b-container");
 
-quizBData.forEach((qObj, i) => {
+quizBData.forEach((data, index) => {
+  // Create card
   const card = document.createElement("div");
   card.className = "card question-card";
 
   const cardBody = document.createElement("div");
   cardBody.className = "card-body";
 
-  // Question text
-  const qTitle = document.createElement("h5");
-  qTitle.className = "card-title";
-  qTitle.textContent = `Q${i + 1}: ${qObj.question}`;
-  cardBody.appendChild(qTitle);
+  // Title
+  const questionTitle = document.createElement("h5");
+  questionTitle.className = "card-title";
+  questionTitle.textContent = `Question ${index + 1}: ${data.question}`;
+  cardBody.appendChild(questionTitle);
 
-  // Direct answer
-  const ansP = document.createElement("p");
-  ansP.className = "answer-direct";
-  ansP.innerHTML = `<strong>Answer:</strong> ${qObj.answer}`;
-  cardBody.appendChild(ansP);
+  // store references
+  const labelsArray = [];
 
+  // Choices
+  const choicesDiv = document.createElement("div");
+  choicesDiv.className = "choices";
+
+  data.choices.forEach((choice, cIndex) => {
+    const label = document.createElement("label");
+    label.className = "form-check-label";
+    
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "B-q-" + index; 
+    radio.value = cIndex;
+    radio.classList.add("form-check-input", "me-2");
+
+    label.appendChild(radio);
+    label.appendChild(document.createTextNode(choice));
+    choicesDiv.appendChild(label);
+
+    labelsArray.push(label);
+  });
+
+  cardBody.appendChild(choicesDiv);
+
+  const feedbackSpan = document.createElement("div");
+  feedbackSpan.className = "feedback";
+  cardBody.appendChild(feedbackSpan);
+
+  const checkBtn = document.createElement("button");
+  checkBtn.className = "btn btn-sm btn-outline-primary mt-2";
+  checkBtn.textContent = "Check Answer";
+
+  checkBtn.onclick = function() {
+    const radios = document.getElementsByName("B-q-" + index);
+    let selectedIndex = -1;
+    radios.forEach((r) => {
+      if (r.checked) {
+        selectedIndex = parseInt(r.value, 10);
+      }
+    });
+
+    if (selectedIndex === -1 || selectedIndex !== data.correct) {
+      feedbackSpan.textContent =
+        "Wrong. The correct answer is: " + data.choices[data.correct];
+      feedbackSpan.classList.add("wrong");
+      feedbackSpan.classList.remove("correct");
+
+      userAnswersB[index] = false;
+      labelsArray[data.correct].classList.add("highlight-correct");
+    } else {
+      feedbackSpan.textContent = "Correct!";
+      feedbackSpan.classList.add("correct");
+      feedbackSpan.classList.remove("wrong");
+      userAnswersB[index] = true;
+    }
+
+    // Disable radios
+    radios.forEach(r => r.disabled = true);
+  };
+
+  cardBody.appendChild(checkBtn);
   card.appendChild(cardBody);
   sectionBContainer.appendChild(card);
 });
+
+// --------------- FINAL SCORE FUNCTIONS ---------------
+function calculateFinalScoreA() {
+  let scoreA = 0;
+  userAnswersA.forEach(ans => {
+    if (ans === true) {
+      scoreA++;
+    }
+  });
+  document.getElementById("final-score-a").textContent =
+    `Your final score for Section A: ${scoreA} / ${quizAData.length}`;
+}
+
+function calculateFinalScoreB() {
+  let scoreB = 0;
+  userAnswersB.forEach(ans => {
+    if (ans === true) {
+      scoreB++;
+    }
+  });
+  document.getElementById("final-score-b").textContent =
+    `Your final score for Section B: ${scoreB} / ${quizBData.length}`;
+}
 </script>
 </body>
 </html>
