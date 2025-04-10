@@ -9,41 +9,152 @@
     rel="stylesheet"
   >
   <style>
-    body {
-      background-color: #f8f9fa;
+    html {
+      scroll-behavior: smooth;
     }
+  
+    body {
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+      font-family: 'Segoe UI', sans-serif;
+      color: #212529;
+      position: relative;
+      padding-bottom: 100px;
+    }
+  
     .quiz-title {
-      margin-top: 20px;
+      margin-top: 40px;
       margin-bottom: 40px;
       text-align: center;
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: #343a40;
+      animation: fadeIn 0.7s ease-in-out;
     }
+  
     .section-title {
-      margin-top: 40px;
+      margin-top: 60px;
       margin-bottom: 20px;
+      color: #495057;
+      font-weight: 600;
+      font-size: 1.5rem;
+      border-left: 6px solid #0d6efd;
+      padding-left: 12px;
+      animation: fadeInLeft 0.7s ease-in-out;
     }
+  
     .question-card {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease-in-out;
+      border: none;
+      animation: fadeInUp 0.5s ease-in-out;
     }
+  
+    .question-card:hover {
+      transform: scale(1.01);
+    }
+  
+    .card-body {
+      padding: 24px;
+    }
+  
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+  
     .choices label {
       display: block;
-      margin-top: 3px;
+      padding: 8px 12px;
       cursor: pointer;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      transition: all 0.2s ease;
     }
+  
+    .choices label:hover {
+      background-color: #e2e6ea;
+    }
+  
     .feedback {
-      margin-top: 10px;
-      font-weight: bold;
+      margin-top: 14px;
+      font-weight: 600;
+      font-size: 0.95rem;
     }
+  
     .feedback.correct {
-      color: green;
+      color: #198754;
     }
+  
     .feedback.wrong {
-      color: red;
+      color: #dc3545;
     }
+  
     .highlight-correct {
-      color: green; 
+      color: #198754;
       font-weight: bold;
+    }
+  
+    button.btn {
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 8px 16px;
+      margin-top: 10px;
+    }
+  
+    .btn-outline-primary:hover {
+      background-color: #0d6efd;
+      color: #fff;
+    }
+  
+    footer {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-top: 40px;
+    }
+  
+    /* Animations */
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  
+    @keyframes fadeInLeft {
+      0% { opacity: 0; transform: translateX(-20px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+  
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  
+    /* Scroll-to-top button */
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: none;
+      background-color: #0d6efd;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 999;
+    }
+  
+    #scrollTopBtn:hover {
+      background-color: #0b5ed7;
     }
   </style>
+  
 </head>
 <body>
 
@@ -973,5 +1084,22 @@ function calculateFinalScoreB() {
     `Your final score for Section B: ${scoreB} / ${quizBData.length}`;
 }
 </script>
+<!-- Scroll-to-top Button -->
+<button id="scrollTopBtn" title="Go to top">↑</button>
+
+<script>
+  // Show button when scrolling
+  window.onscroll = function () {
+    const btn = document.getElementById("scrollTopBtn");
+    btn.style.display = (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100)
+      ? "block"
+      : "none";
+  };
+
+  document.getElementById("scrollTopBtn").onclick = function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+</script>
+
 </body>
 </html>
